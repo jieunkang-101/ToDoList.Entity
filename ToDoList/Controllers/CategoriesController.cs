@@ -36,10 +36,15 @@ namespace ToDoList.Controllers
 
     public ActionResult Details(int id)
     {
-      Category thisCategory = _db.Categories.FirstOrDefault(category => category.CategoryId == id);
+      // Category thisCategory = _db.Categories.FirstOrDefault(category => category.CategoryId == id);
+      // return View(thisCategory);
+      var thisCategory = _db.Categories
+          .Include(category => category.Items)
+          .ThenInclude(join => join.Item)
+          .FirstOrDefault(category => category.CategoryId == id);
       return View(thisCategory);
     }
-
+    
     public ActionResult Edit(int id)
     {
       var thisCategory = _db.Categories.FirstOrDefault(category => category.CategoryId == id);
